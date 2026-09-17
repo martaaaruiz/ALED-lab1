@@ -58,6 +58,7 @@ public class EEGModel {
 	public EEGModel(Measurement[] measurements) {
 		// TODO
 		
+		
 	}
 
 	/**
