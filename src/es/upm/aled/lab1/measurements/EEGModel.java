@@ -56,7 +56,9 @@ public class EEGModel {
 	 * @param measurements The Measurements that make up the EEGModel.
 	 */
 	public EEGModel(Measurement[] measurements) {
-		// TODO
+	for (Measurement m: measurements) {
+		this.addMeasurement(m);
+	}
 		
 		
 	}
@@ -90,9 +92,7 @@ public class EEGModel {
 	 * @return The new EEGModel.
 	 */
 	public EEGModel filter(Filter filter) {
-		// TODO
-		
-		return null;
+		return filter.applyFilter(this);
 	}
 
 	/**
@@ -131,9 +131,28 @@ public class EEGModel {
 	 * @throws IOException Thrown if the file can't be written.
 	 */
 	public void saveFile(String fileName) throws IOException {
-		// TODO
+		File f = new File(fileName);
+		FileOutputStream fos = new FileOutputStream(f);
+		PrintStream ps = new PrintStream(fos);
 		
-	}
+		for (int i=0; i<this.measurements.size(); i++) {
+			Measurement m= this.measurements.get(i);
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append(i % 256);
+			
+		for(int j=0; j<m.numChannels(); j++) {
+						sb.append(",").append(m.getChannel(j));
+		}
+						ps.println(sb.toString());
+		}
+						ps.close();
+						fos.close();
+						
+					}
+		
+		
+	
 
 	/**
 	 * Plots the data of the EEGModel using the classes in the es.upm.aled.lab1.gui
@@ -250,13 +269,22 @@ public class EEGModel {
 		if (args.length > 0) {
 			EEGModel eeg = new EEGModel(args[0]);
 			eeg.plotData();
-			// TODO
+			int [] ultimosCanales = new int [] {5,6,7};
+			EEGModel filtrado = eeg.filter(new FilterExtractChannels(ultimosCanales))
+					.filter(new FilterExtractPeriod(2750,5750));
+			filtrado.plotData();
 			
 		} else {
 			EEGModel eeg = new EEGModel();
 			eeg.createSyntheticData(1000);
-			// TODO
+			try {
+				eeg.saveFile("Synthetic.txt");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 			
 		}
 	}
+	
 }
