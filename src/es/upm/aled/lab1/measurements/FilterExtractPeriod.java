@@ -7,7 +7,8 @@ package es.upm.aled.lab1.measurements;
  *
  */
 public class FilterExtractPeriod implements Filter {
-
+	private int min; //veo que en el cosntructor aparecen dos parametros po rlo tanto sera necesario esos parametros declararlos como atributo si no no podre acceder a ellos
+	private int max;
 	/**
 	 * Builds the Filter from the [min, max] range defining the period that needs to
 	 * be extracted. min and max are the indexes of the first and last measurements
@@ -21,13 +22,25 @@ public class FilterExtractPeriod implements Filter {
 	 */
 	public FilterExtractPeriod(int min, int max) {
 		// TODO
+		this.min=min;
+		this.max=max;
+		
 		
 	}
 
 	@Override
 	public EEGModel applyFilter(EEGModel eeg) {
 		// TODO
+		Measurement[] measurements = eeg.getMeasurements();
+		if(max<measurements.length && min<measurements.length) { //compruebo que estan bien las dimensiones
+			Measurement [] filteredMeasurements = new Measurement[max-min+1]; //me creo un array vacio 
+			
+			int k = 0; //quiero copiar por ej la posicion 9 del array eeg en la posicion 0 
+			for(int i =min;i<=max;i++)
+				filteredMeasurements[k++] = measurements[i];
+			return new EEGModel(filteredMeasurements);
+		}
 		
-		return null;
+		return new EEGModel(); //devuelvo un array vacio si los limites se salen 
 	}
 }
