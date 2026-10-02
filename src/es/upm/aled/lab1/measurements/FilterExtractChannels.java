@@ -28,7 +28,7 @@ public class FilterExtractChannels implements Filter {
 		
 		for(int i=0;i<measurements.length;i++) {
 			float[] channels = new float[validChannels.length];
-			int k=0;
+			int k=0;     
 			for(int channel:validChannels) //recorro el arrayt de valid channels los numeros que quiero 
 				channels[k++] = measurements[i].getChannel(channel); //copio la medida en el array nuevo 
 			filteredMeasurements[i] = new Measurement(channels);
@@ -40,4 +40,5 @@ public class FilterExtractChannels implements Filter {
 	}
 
 }
+//commit
 
